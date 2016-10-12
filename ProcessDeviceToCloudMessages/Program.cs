@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Microsoft.ServiceBus.Messaging;
 
 namespace ProcessDeviceToCloudMessages
@@ -11,7 +15,7 @@ namespace ProcessDeviceToCloudMessages
             const string iotHubD2CEndpoint = "messages/events";
             
             StoreEventProcessor.StorageConnectionString =
-                "DefaultEndpointsProtocol=http;AccountName=esthings;AccountKey=XYNwkmqCx6NwT3dQHLtkGot0Xv6zcIeCwD3XDmcJ9NUdL9Yd8vUvNjDDZM8RE9PCy8cpAJC0IVWz2ecuroXFWg==";
+                "DefaultEndpointsProtocol=http;AccountName=esthings;AccountKey=EQmh5WvKutnJRcCo/UPEPuhSRjfPTZywqg8XYOF/fQphl8Ngf+T64++LZCCNyQr59srpUzf2Swx0nUbkbkjb1Q==";
             StoreEventProcessor.ServiceBusConnectionString =
                 "Endpoint=sb://esthings.servicebus.windows.net/;SharedAccessKeyName=esThingsSend;SharedAccessKey=TM/CQ6LQEdYZ657z6tTUbLCqZUad3ofEOy7wRehLYRU=;EntityPath=esthingsqueue";
 
