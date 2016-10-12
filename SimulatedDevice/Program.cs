@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Azure.Devices.Client;
@@ -6,6 +7,7 @@ using Newtonsoft.Json;
 
 namespace SimulatedDevice
 {
+    [SuppressMessage("ReSharper", "FunctionNeverReturns")]
     public class Program
     {
         public static DeviceClient DeviceClient;
@@ -19,7 +21,7 @@ namespace SimulatedDevice
         /// For the sake of simplicity, this class does not implement any retry policy.
         /// In production code, one should implement a retry policy such as exponential backoff.
         /// </summary>
-        /// <seealso cref="https://msdn.microsoft.com/library/hh675232.aspx"/>
+        /// <seealso cref="http://msdn.microsoft.com/library/hh675232.aspx"/>
         /// <param name="args">The command line arguments.</param>
         public static void Main(string[] args)
         {
@@ -29,6 +31,7 @@ namespace SimulatedDevice
 
             SendDeviceToCloudMessagesAsync();
             SendDeviceToCloudInteractiveMessagesAsync();
+            ReceiveCloudToDeviceAsync();
 
             Console.ReadLine();
         }
@@ -69,6 +72,25 @@ namespace SimulatedDevice
                 Console.WriteLine($"{DateTime.Now} > Sending interactive message: {interactiveMessageString}");
 
                 Task.Delay(10000).Wait();
+            }
+        }
+
+        private static async void ReceiveCloudToDeviceAsync()
+        {
+            Console.WriteLine("\nReceiving cloud to device messages from service...");
+
+            while (true)
+            {
+                Message message = await DeviceClient.ReceiveAsync(); // timeout defaults to one minute
+
+                if (message == null)
+                    continue;
+
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("Received message: {0}", Encoding.ASCII.GetString(message.GetBytes()));
+                Console.ResetColor();
+
+                await DeviceClient.CompleteAsync(message);
             }
         }
     }
